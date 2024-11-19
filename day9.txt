@@ -1,0 +1,229 @@
+#include <stdio.h>
+int main()
+{
+ int i =1234;
+ float pi = 3.14;
+ char c = 'A';
+ void *ptr;
+ ptr = &i;
+ printf("i = %d\n",*(int *)ptr);
+
+ ptr = &pi;
+ printf("pi = %.2f\n",*(float *)ptr);
+
+ ptr = &c;
+ printf("c = %c\n",*(char *)ptr);
+ return 0;
+}
+
+
+
+Problem 1: Array Element Access
+Write a program in C that demonstrates the use of a pointer to a const array of
+integers. The program should do the following:
+1. Define an integer array with fixed values (e.g., {1, 2, 3, 4, 5}).
+2. Create a pointer to this array that uses the const qualifier to ensure that the elements
+cannot be modified through the pointer.
+3. Implement a function printArray(const int *arr, int size) to print the elements of the
+array using the const pointer.
+4. Attempt to modify an element of the array through the pointer (this should produce
+a compilation error, demonstrating the behavior of const).
+Requirements:
+ a. Use a pointer of type const int* to access the array.
+ b. The function should not modify the array elements.
+
+ANSWER:
+#include <stdio.h>
+void printArray(const int *arr, int size);
+int main()
+{
+ int arr[] = {1,2,3,4,5};
+ int const *pArr = arr;
+ printArray(pArr,5);
+ //*(ptr + 1) = 8;//Not allowed
+ return 0;
+
+}
+void printArray(const int *arr, int size)
+{
+ arr[0] =8;
+ printf("Array elements are: ");
+ for(int i=0;i<size;i++)
+ {
+ printf("%d ",*(arr+i));
+ }
+}
+
+
+Problem 2: Protecting a Value
+Write a program in C that demonstrates the use of a pointer to a const integer and a const pointer to an integer. The program should:
+1. Define an integer variable and initialize it with a value (e.g., int value = 10;).
+2. Create a pointer to a const integer and demonstrate that the value cannot be modified through the pointer.
+3. Create a const pointer to the integer and demonstrate that the pointer itself cannot be changed to point to another variable.
+4. Print the value of the integer and the pointer address in each case.
+Requirements:
+ a. Use the type qualifiers const int* and int* const appropriately.
+ b. Attempt to modify the value or the pointer in an invalid way to show how the compiler enforces the constraints.
+
+ANSWER:
+
+#include <stdio.h>
+int main()
+{
+ int value = 10,num1;
+ int const *pVal = &value;
+ printf("001 value of pVal = %p\n",pVal);
+ printf("002 value that pVal pointing to = %d\n",*pVal);
+ //*pVal = 50;//Show error that we can"t modify the constan value
+ int *const pVal1 = &value;
+ printf("003 value that pVal1 pointing to = %d\n",*pVal1);
+ printf("004 value of pVal1 = %p\n",pVal1);
+ //pVal1 = &num1;//Show error tha we can't modify the address in constant pointer
+ return 0;
+}
+
+3) Universal Data Printer
+You are tasked with creating a universal data printing function in C that can handle different types of data (int, float, and char*). The function should use void pointers to accept any type of data and print it appropriately based on a provided type specifier.
+Specifications
+Implement a function print_data with the following signature:
+ void print_data(void* data, char type);
+Parameters:
+data: A void* pointer that points to the data to be printed.
+type: A character indicating the type of data:
+ 'i' for int
+ 'f' for float
+ 's' for char* (string)
+Behavior:
+ If type is 'i', interpret data as a pointer to int and print the integer.
+ If type is 'f', interpret data as a pointer to float and print the floating-point value.
+ If type is 's', interpret data as a pointer to a char* and print the string.
+In the main function:
+ Declare variables of types int, float, and char*.
+ Call print_data with these variables using the appropriate type specifier.
+Example output:
+Input data: 42 (int), 3.14 (float), "Hello, world!" (string)
+Output:
+Integer: 42
+Float: 3.14
+String: Hello, world!
+Constraints
+1. Use void* to handle the input data.
+2. Ensure that typecasting from void* to the correct type is performed within the
+print_data function.
+3. Print an error message if an unsupported type specifier is passed (e.g., 'x').
+
+
+#include <stdio.h>
+void print_data(void* data, char type);
+int main()
+{
+ int int_type;
+ float float_type;
+ char string[50];
+
+ printf("Enter the datas:(int,float,string)\n");
+ scanf("%d %f %[^\n]",&int_type,&float_type,string);
+ print_data(&int_type,'i');
+ print_data(&float_type,'f');
+ print_data(string,'s');
+ //print_data(string,'x');
+ return 0;
+
+}
+void print_data(void* data, char type)
+{
+ switch(type)
+ {
+ case 'i':
+ printf("Integer: %d\n", *(int*)data);
+ break;
+ case 'f':
+ printf("Float: %.2f\n", *(float*)data);
+ break;
+ case 's':
+ printf("String: %s\n", (char*)data);
+ break;
+ default:
+ printf("Error : Unsupported type specifier\n");
+ }
+}
+
+5.WAP to find length, concatenate and compare 2 strings
+
+ANSWER:
+#include<stdio.h>
+void find_count(char str1[],char str2[]);
+void concatenate(char str1[],char str2[]);
+void equal_or_not(char str1[],char str2[]);
+int main(){
+int op;
+char string1[100];
+char string2[100];
+printf("enter first string\n");
+scanf("%s",string1);
+printf("enter second string\n");
+scanf("%s",string2);
+printf("enter options\n1.count\n2.concatenation\n3.compare\n");
+scanf("%d",&op);
+switch (op)
+{
+case 1:
+find_count(string1,string2);
+break;
+case 2:
+concatenate(string1,string2);
+break;
+case 3:
+equal_or_not(string1,string2);
+break;
+default:
+printf("invalid option");
+break;
+}
+}
+void find_count(char str1[],char str2[])
+{
+int count = 0;
+int i=0;
+while (str1[i]!='\0')
+{
+count=count+1;
+i++;
+}
+printf("printf count of first string = %d\n",count);
+while (str2[i]!='\0')
+{
+count=count+1;
+i++;
+}
+printf("count of second string = %d\n",count);
+}
+void concatenate(char str1[],char str2[]){
+int i,j;
+char arr[200];
+for(i=0;str1[i]!='\0';i++){
+arr[i]=str1[i];
+}
+for(j=0;str2[j]!='\0';j++){
+arr[i+j]=str2[j];
+}
+arr[i+j]='\0';
+printf("concatinated string = %s\n",arr);
+}
+void equal_or_not(char str1[],char str2[]){
+int flag=0,i;
+for (i = 0; str1[i] != '\0' && str2[i] != '\0'; i++) {
+if (str1[i] != str2[i]) {
+flag = 1;
+break;
+}
+}
+if (str1[i] != '\0' || str2[i] != '\0') {
+flag = 1;
+}
+if (flag == 0) {
+printf("Strings are equal.\n");
+} else {
+printf("Strings are not equal.\n");
+}
+}
